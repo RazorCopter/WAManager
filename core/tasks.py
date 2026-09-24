@@ -29,11 +29,10 @@ def scheduled_rsvp_announcement(force_event_id=None):
             print("ERRORE: Nessun MessageTemplate trovato per RSVP.")
             continue
             
-        # Renderizza il testo
         t = Template(template.body)
         c = Context({
             'event_date': event.date.strftime('%d/%m/%Y'),
-            'deadline_time': event.match_send_at.strftime('%H:%M') if event.match_send_at else '',
+            'deadline_time': timezone.localtime(event.match_send_at).strftime('%H:%M') if event.match_send_at else '',
             'rsvp_link': 'Rispondete al sondaggio!' if rsvp_mode == 'POLL' else 'Rispondete liberamente a questo messaggio!'
         })
         message = t.render(c)
