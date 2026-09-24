@@ -1,0 +1,57 @@
+2026/09/23-16:29:16.192 7280 Reusing MANIFEST C:\Users\gianvito.bleve\OneDrive - Banca Mediolanum SPA\Documenti\Progetti\WAManager\wa-gateway\.wwebjs_auth\session\Default\IndexedDB\https_web.whatsapp.com_0.indexeddb.leveldb/MANIFEST-000001
+2026/09/23-16:29:16.194 7280 Recovering log #817
+2026/09/23-16:29:16.244 7280 Reusing old log C:\Users\gianvito.bleve\OneDrive - Banca Mediolanum SPA\Documenti\Progetti\WAManager\wa-gateway\.wwebjs_auth\session\Default\IndexedDB\https_web.whatsapp.com_0.indexeddb.leveldb/000817.log 
+2026/09/23-16:29:26.986 7280 Level-0 table #842: started
+2026/09/23-16:29:27.028 7280 Level-0 table #842: 1146228 bytes OK
+2026/09/23-16:29:27.030 7280 Delete type=0 #817
+2026/09/23-16:29:27.079 5eb4 Compacting 1@0 + 0@1 files
+2026/09/23-16:29:27.123 5eb4 Generated table #843@0: 32889 keys, 665128 bytes
+2026/09/23-16:29:27.127 5eb4 Generated table #844@0: 233 keys, 18660 bytes
+2026/09/23-16:29:27.127 5eb4 Compacted 1@0 + 0@1 files => 683788 bytes
+2026/09/23-16:29:27.128 5eb4 compacted to: files[ 0 2 19 0 0 0 0 ]
+2026/09/23-16:29:27.129 5eb4 Delete type=2 #842
+2026/09/23-16:29:27.207 5eb4 Compacting 1@1 + 10@2 files
+2026/09/23-16:29:27.304 5eb4 Generated table #845@1: 88121 keys, 2239359 bytes
+2026/09/23-16:29:27.385 5eb4 Generated table #846@1: 56735 keys, 2242842 bytes
+2026/09/23-16:29:27.428 5eb4 Generated table #847@1: 12644 keys, 2169688 bytes
+2026/09/23-16:29:27.466 5eb4 Generated table #848@1: 2578 keys, 2156761 bytes
+2026/09/23-16:29:27.502 5eb4 Generated table #849@1: 3290 keys, 2151371 bytes
+2026/09/23-16:29:27.541 5eb4 Generated table #850@1: 2398 keys, 2155712 bytes
+2026/09/23-16:29:27.569 5eb4 Generated table #851@1: 2509 keys, 2154040 bytes
+2026/09/23-16:29:27.602 5eb4 Generated table #852@1: 5333 keys, 2160417 bytes
+2026/09/23-16:29:27.679 5eb4 Generated table #853@1: 33469 keys, 2252667 bytes
+2026/09/23-16:29:27.754 5eb4 Generated table #854@1: 29042 keys, 2263354 bytes
+2026/09/23-16:29:27.769 5eb4 Generated table #855@1: 4380 keys, 401010 bytes
+2026/09/23-16:29:27.769 5eb4 Compacted 1@1 + 10@2 files => 22347221 bytes
+2026/09/23-16:29:27.770 5eb4 compacted to: files[ 0 1 20 0 0 0 0 ]
+2026/09/23-16:29:27.770 5eb4 Delete type=2 #821
+2026/09/23-16:29:27.770 5eb4 Delete type=2 #822
+2026/09/23-16:29:27.770 5eb4 Delete type=2 #823
+2026/09/23-16:29:27.770 5eb4 Delete type=2 #824
+2026/09/23-16:29:27.770 5eb4 Delete type=2 #825
+2026/09/23-16:29:27.770 5eb4 Delete type=2 #826
+2026/09/23-16:29:27.770 5eb4 Delete type=2 #827
+2026/09/23-16:29:27.770 5eb4 Delete type=2 #828
+2026/09/23-16:29:27.770 5eb4 Delete type=2 #829
+2026/09/23-16:29:27.771 5eb4 Delete type=2 #830
+2026/09/23-16:29:27.771 5eb4 Delete type=2 #843
+2026/09/23-16:29:27.876 7280 Compacting 1@1 + 8@2 files
+2026/09/23-16:29:27.943 7280 Generated table #856@1: 19951 keys, 2242534 bytes
+2026/09/23-16:29:27.998 7280 Generated table #857@1: 19626 keys, 2175356 bytes
+2026/09/23-16:29:28.035 7280 Generated table #858@1: 7104 keys, 2129360 bytes
+2026/09/23-16:29:28.113 7280 Generated table #859@1: 87860 keys, 2235091 bytes
+2026/09/23-16:29:28.196 7280 Generated table #860@1: 99777 keys, 2250439 bytes
+2026/09/23-16:29:28.385 7280 Generated table #861@1: 98046 keys, 2247123 bytes
+2026/09/23-16:29:28.482 7280 Generated table #862@1: 99225 keys, 2248774 bytes
+2026/09/23-16:29:28.545 7280 Generated table #863@1: 60104 keys, 1512544 bytes
+2026/09/23-16:29:28.545 7280 Compacted 1@1 + 8@2 files => 17041221 bytes
+2026/09/23-16:29:28.546 7280 compacted to: files[ 0 0 20 0 0 0 0 ]
+2026/09/23-16:29:28.546 7280 Delete type=2 #832
+2026/09/23-16:29:28.546 7280 Delete type=2 #833
+2026/09/23-16:29:28.546 7280 Delete type=2 #834
+2026/09/23-16:29:28.546 7280 Delete type=2 #835
+2026/09/23-16:29:28.547 7280 Delete type=2 #836
+2026/09/23-16:29:28.547 7280 Delete type=2 #837
+2026/09/23-16:29:28.547 7280 Delete type=2 #838
+2026/09/23-16:29:28.547 7280 Delete type=2 #839
+2026/09/23-16:29:28.547 7280 Delete type=2 #844

@@ -1,0 +1,58 @@
+2026/09/23-16:37:50.123 2c54 Reusing MANIFEST C:\Users\gianvito.bleve\OneDrive - Banca Mediolanum SPA\Documenti\Progetti\WAManager\wa-gateway\.wwebjs_auth\session\Default\IndexedDB\https_web.whatsapp.com_0.indexeddb.leveldb/MANIFEST-000001
+2026/09/23-16:37:50.123 2c54 Recovering log #841
+2026/09/23-16:37:50.133 2c54 Reusing old log C:\Users\gianvito.bleve\OneDrive - Banca Mediolanum SPA\Documenti\Progetti\WAManager\wa-gateway\.wwebjs_auth\session\Default\IndexedDB\https_web.whatsapp.com_0.indexeddb.leveldb/000841.log 
+2026/09/23-16:37:59.058 bc4 Level-0 table #866: started
+2026/09/23-16:37:59.077 bc4 Level-0 table #866: 1179091 bytes OK
+2026/09/23-16:37:59.079 bc4 Delete type=0 #841
+2026/09/23-16:38:04.389 bc4 Compacting 1@0 + 0@1 files
+2026/09/23-16:38:04.407 bc4 Generated table #867@0: 29658 keys, 564091 bytes
+2026/09/23-16:38:04.409 bc4 Generated table #868@0: 51 keys, 3569 bytes
+2026/09/23-16:38:04.409 bc4 Compacted 1@0 + 0@1 files => 567660 bytes
+2026/09/23-16:38:04.409 bc4 compacted to: files[ 0 2 20 0 0 0 0 ]
+2026/09/23-16:38:04.409 bc4 Delete type=2 #866
+2026/09/23-16:38:53.611 bc4 Compacting 1@1 + 10@2 files
+2026/09/23-16:38:53.663 bc4 Generated table #869@1: 88646 keys, 2238119 bytes
+2026/09/23-16:38:53.695 bc4 Generated table #870@1: 56056 keys, 2243596 bytes
+2026/09/23-16:38:53.716 bc4 Generated table #871@1: 12139 keys, 2168569 bytes
+2026/09/23-16:38:53.734 bc4 Generated table #872@1: 2567 keys, 2157967 bytes
+2026/09/23-16:38:53.752 bc4 Generated table #873@1: 3290 keys, 2150184 bytes
+2026/09/23-16:38:53.768 bc4 Generated table #874@1: 2397 keys, 2153868 bytes
+2026/09/23-16:38:53.783 bc4 Generated table #875@1: 2517 keys, 2153453 bytes
+2026/09/23-16:38:53.801 bc4 Generated table #876@1: 5720 keys, 2160257 bytes
+2026/09/23-16:38:53.861 bc4 Generated table #877@1: 33281 keys, 2253344 bytes
+2026/09/23-16:38:53.908 bc4 Generated table #878@1: 28810 keys, 2241036 bytes
+2026/09/23-16:38:53.908 bc4 Compacted 1@1 + 10@2 files => 21920393 bytes
+2026/09/23-16:38:53.908 bc4 compacted to: files[ 0 1 20 0 0 0 0 ]
+2026/09/23-16:40:16.796 bc4 Compacting 1@1 + 10@2 files
+2026/09/23-16:40:16.839 bc4 Generated table #879@1: 20549 keys, 2263258 bytes
+2026/09/23-16:40:16.883 bc4 Generated table #880@1: 22541 keys, 2188893 bytes
+2026/09/23-16:40:16.914 bc4 Generated table #881@1: 7579 keys, 2128899 bytes
+2026/09/23-16:40:16.959 bc4 Generated table #882@1: 67465 keys, 2206511 bytes
+2026/09/23-16:40:17.005 bc4 Generated table #883@1: 99673 keys, 2249196 bytes
+2026/09/23-16:40:17.055 bc4 Generated table #884@1: 97686 keys, 2246449 bytes
+2026/09/23-16:40:17.118 bc4 Generated table #885@1: 99303 keys, 2249803 bytes
+2026/09/23-16:40:17.169 bc4 Generated table #886@1: 82243 keys, 2006581 bytes
+2026/09/23-16:40:17.169 bc4 Compacted 1@1 + 10@2 files => 17539590 bytes
+2026/09/23-16:40:17.169 bc4 compacted to: files[ 0 0 18 0 0 0 0 ]
+2026/09/23-16:40:17.170 bc4 Delete type=2 #831
+2026/09/23-16:40:17.170 bc4 Delete type=2 #845
+2026/09/23-16:40:17.170 bc4 Delete type=2 #846
+2026/09/23-16:40:17.170 bc4 Delete type=2 #847
+2026/09/23-16:40:17.170 bc4 Delete type=2 #848
+2026/09/23-16:40:17.170 bc4 Delete type=2 #849
+2026/09/23-16:40:17.170 bc4 Delete type=2 #850
+2026/09/23-16:40:17.170 bc4 Delete type=2 #851
+2026/09/23-16:40:17.170 bc4 Delete type=2 #852
+2026/09/23-16:40:17.170 bc4 Delete type=2 #853
+2026/09/23-16:40:17.170 bc4 Delete type=2 #854
+2026/09/23-16:40:17.170 bc4 Delete type=2 #855
+2026/09/23-16:40:17.170 bc4 Delete type=2 #856
+2026/09/23-16:40:17.170 bc4 Delete type=2 #857
+2026/09/23-16:40:17.170 bc4 Delete type=2 #858
+2026/09/23-16:40:17.170 bc4 Delete type=2 #859
+2026/09/23-16:40:17.170 bc4 Delete type=2 #860
+2026/09/23-16:40:17.170 bc4 Delete type=2 #861
+2026/09/23-16:40:17.170 bc4 Delete type=2 #862
+2026/09/23-16:40:17.170 bc4 Delete type=2 #863
+2026/09/23-16:40:17.170 bc4 Delete type=2 #867
+2026/09/23-16:40:17.170 bc4 Delete type=2 #868

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adesione Lezione di Tango</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+    <style>
+        body { padding: 2rem 0; background-color: var(--background-color); }
+        .container { max-width: 600px; }
+        .hero { text-align: center; margin-bottom: 2rem; }
+        .hero h1 { margin-bottom: 0.5rem; color: var(--primary); }
+        .hero p { color: var(--muted-color); }
+    </style>
+</head>
+<body>
+    <main class="container">
+        <div class="hero">
+            <h1>💃 Tango RSVP 🕺</h1>
+            <p>Lezione del <strong>{{ event.date|date:"d M Y" }}</strong> alle <strong>{{ event.time|time:"H:i" }}</strong></p>
+            <p><small>Presso: {{ event.location }}</small></p>
+        </div>
+
+        {% if error %}
+        <article class="error" style="background-color: #ffebee; color: #c62828; border-color: #ef9a9a;">
+            <strong>Errore:</strong> {{ error }}
+        </article>
+        {% endif %}
+
+        {% if not is_expired %}
+        <article>
+            <form method="POST">
+                {% csrf_token %}
+                
+                <label for="phone">
+                    Il tuo numero di telefono (per identificarti)
+                    <input type="tel" id="phone" name="phone" placeholder="+39 333 1234567" required>
+                </label>
+
+                <label for="status">Ci sarai?</label>
+                <select id="status" name="status" required>
+                    <option value="" disabled selected>Seleziona un'opzione...</option>
+                    <option value="attending">Sì, presente!</option>
+                    <option value="not_attending">No, purtroppo sono assente</option>
+                    <option value="waitlisted">Forse (mettimi in lista d'attesa)</option>
+                </select>
+
+                <details>
+                    <summary>Vuoi cambiare ruolo per questa lezione?</summary>
+                    <label for="role">Ruolo (lascia vuoto per usare il tuo ruolo predefinito)</label>
+                    <select id="role" name="role">
+                        <option value="">Usa il mio ruolo predefinito</option>
+                        <option value="leader">Leader</option>
+                        <option value="follower">Follower</option>
+                        <option value="both">Entrambi (adattabile)</option>
+                    </select>
+                </details>
+
+                <button type="submit" class="contrast">Invia Conferma</button>
+            </form>
+        </article>
+        {% endif %}
+    </main>
+</body>
+</html>

@@ -1,0 +1,698 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WAManager - Premium Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'core/css/dashboard.css' %}?v=2">
+</head>
+<body>
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+
+    <div class="dashboard-container">
+        
+        <header class="glass-panel">
+            <div class="logo">
+                <h1>Tango<span>Manager</span></h1>
+                <p>Centro di Controllo Adesioni</p>
+            </div>
+            <div class="user-info">
+                <div style="text-align: right; margin-right: 1rem; color: var(--text-muted); font-size: 0.85rem;">
+                    <div>Ora Server</div>
+                    <strong style="color: white; font-family: monospace; font-size: 0.95rem;">{% now "d/m/Y H:i" %}</strong>
+                </div>
+                <span>Bentornato, {{ request.user.username }}</span>
+                <a href="{% url 'admin:logout' %}" class="btn btn-outline">Logout</a>
+            </div>
+        </header>
+
+        <div class="tabs-nav">
+            <button class="tab-btn active" onclick="switchTab('tab-control')">Centro di Controllo</button>
+            <button class="tab-btn" onclick="switchTab('tab-roster')">Rubrica Partecipanti</button>
+            <button class="tab-btn" onclick="switchTab('tab-config')">Configurazione Automazioni</button>
+            <button class="tab-btn" onclick="switchTab('tab-setup')">Setup Sistema</button>
+        </div>
+
+        <!-- TAB CENTRO DI CONTROLLO -->
+        <div id="tab-control" class="tab-content active">
+            {% if upcoming_event %}
+            <div class="main-grid">
+                
+                <section class="glass-panel widget widget-event">
+                    <h2>Prossimo Evento</h2>
+                    <div class="event-details">
+                        <div class="date-badge">
+                            <span class="day">{{ upcoming_event.date|date:"d" }}</span>
+                            <span class="month">{{ upcoming_event.date|date:"M" }}</span>
+                        </div>
+                        <div class="info">
+                            <h3>{{ upcoming_event.location }}</h3>
+                            <p>Ore {{ upcoming_event.time|time:"H:i" }}</p>
+                        </div>
+                    </div>
+
+                    <h3 style="margin-top: 1.5rem; margin-bottom: 0.5rem">Azioni Rapide</h3>
+                    <div class="action-buttons">
+                        <button class="btn btn-action" onclick="triggerRSVP()">
+                            <span class="icon">📢</span>
+                            <div class="text">
+                                <strong>Forza Invio Sondaggio</strong>
+                            </div>
+                        </button>
+                        
+                        <button class="btn btn-action btn-accent" onclick="triggerMatch()">
+                            <span class="icon">🤖</span>
+                            <div class="text">
+                                <strong>Genera Coppie Ora</strong>
+                            </div>
+                        </button>
+                    </div>
+                    <div id="action-status" class="status-msg"></div>
+                </section>
+
+                <section class="glass-panel widget widget-stats">
+                    <h2>Stato Adesioni</h2>
+                    <p style="margin-bottom: 1rem; font-size: 0.9rem; color: #a0aec0;">
+                        Le conferme vengono lette in automatico dalla chat tramite AI all'ora di chiusura adesioni specificata.
+                    </p>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <span class="stat-value">{{ stats.total|default:"0" }}</span>
+                            <span class="stat-label">Totali</span>
+                        </div>
+                        <div class="stat-card leader-card">
+                            <span class="stat-value">{{ stats.leaders|default:"0" }}</span>
+                            <span class="stat-label">Leader</span>
+                        </div>
+                        <div class="stat-card follower-card">
+                            <span class="stat-value">{{ stats.followers|default:"0" }}</span>
+                            <span class="stat-label">Follower</span>
+                        </div>
+                        <div class="stat-card both-card">
+                            <span class="stat-value">{{ stats.both|default:"0" }}</span>
+                            <span class="stat-label">Entrambi</span>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="glass-panel widget widget-matches">
+                    <h2>Coppie Generate</h2>
+                    {% if upcoming_event.match_sent and matches %}
+                    <div class="match-lists">
+                        <div class="fixed-pairs">
+                            <h3>Coppie Fisse</h3>
+                            <ul>
+                                {% for m in matches %}
+                                <li>{{ m.leader.first_name }} <span>+</span> {{ m.follower.first_name }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        {% if rotations %}
+                        <div class="rotations">
+                            <h3>In Rotazione</h3>
+                            <ul>
+                                {% for r in rotations %}
+                                <li>{{ r.leader.first_name|default:r.follower.first_name }} (Attende il turno)</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        {% endif %}
+                    </div>
+                    {% else %}
+                    <div style="padding: 2rem; color: #a0aec0; font-style: italic; text-align: center;">
+                        <p style="font-size: 1.1rem; color: white;">Nessuna coppia disponibile.</p>
+                        <p style="font-size: 0.9rem;">Le coppie verranno compilate dall'AI alla chiusura adesioni.</p>
+                    </div>
+                    {% endif %}
+                </section>
+                
+                
+                {% if recurring.debug_mode %}
+                <section class="glass-panel widget widget-logs" style="grid-column: 1 / -1">
+                    <h2>Activity Log</h2>
+                    <div class="console-box">
+                        {% for log in recent_logs %}
+                        <div class="log-line {% if log.status == 'Errore' %}error{% else %}success{% endif %}">
+                            <span class="time">[{{ log.timestamp|date:"d/m/Y H:i:s" }}]</span>
+                            <span class="type">[{{ log.template.name }}]</span>
+                            <span class="msg">{% if log.status == 'Errore' %}{{ log.error_message }}{% else %}Inviato a {{ log.event.whatsapp_group_name }}{% endif %}</span>
+                        </div>
+                        {% empty %}
+                        <div class="log-line">Nessuna attività registrata.</div>
+                        {% endfor %}
+                    </div>
+                </section>
+                {% endif %}
+            </div>
+            {% else %}
+            <div class="glass-panel no-events">
+                <h2>Nessun evento imminente programmato nei prossimi 7 giorni.</h2>
+                <p>Controlla il tab "Configurazione Automazioni" per impostare la schedulazione settimanale.</p>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- TAB RUBRICA PARTECIPANTI -->
+        <div id="tab-roster" class="tab-content">
+            <div class="glass-panel widget" style="position: relative;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                    <h2>Anagrafica Partecipanti</h2>
+                    <button class="btn btn-action btn-accent" onclick="openParticipantModal()" style="padding: 0.6rem 1.2rem; font-size: 0.9rem;">
+                        <span class="icon">➕</span> Aggiungi
+                    </button>
+                </div>
+                
+                <div class="table-responsive">
+                    <table class="roster-table" id="participants-table">
+                        <thead>
+                            <tr>
+                                <th>Nome e Cognome</th>
+                                <th>Telefono</th>
+                                <th>Sesso</th>
+                                <th>Ruolo</th>
+                                <th>Livello</th>
+                                <th>Azioni</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Populated via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB CONFIGURAZIONE -->
+        <div id="tab-config" class="tab-content">
+            <div class="main-grid">
+
+                <section class="glass-panel widget widget-templates">
+                    <h2>Testi dei Messaggi</h2>
+                    <div class="template-editor">
+                        <label>Sondaggio WhatsApp - Domanda (es. Chi è presente oggi?)</label>
+                        <textarea id="rsvp-template-text" rows="2">{{ rsvp_template.body }}</textarea>
+                        
+                        <label>Intestazione Elenco Coppie Finali</label>
+                        <textarea id="match-template-text" rows="2">{{ match_template.body }}</textarea>
+                        
+                        <button class="btn btn-outline" style="margin-top:1rem" onclick="saveTemplates()">Salva Testi</button>
+                        <small id="tpl-status" class="status-msg"></small>
+                    </div>
+                </section>
+                
+                <section class="glass-panel widget">
+                    <h2>Schedulazione Evento</h2>
+                    <p class="subtitle" style="text-align:left; margin-bottom:1rem">Imposta la generazione automatica dell'evento ogni settimana.</p>
+                    <div class="scheduler-group">
+                        <div style="display: flex; gap: 1rem; margin-bottom: 1rem;">
+                            <div style="flex:1">
+                                <label>Da (Data Inizio):</label>
+                                <input type="date" id="sched-start" value="{{ recurring.start_date|date:'Y-m-d'|default:'' }}">
+                            </div>
+                            <div style="flex:1">
+                                <label>A (Data Fine):</label>
+                                <input type="date" id="sched-end" value="{{ recurring.end_date|date:'Y-m-d'|default:'' }}">
+                            </div>
+                        </div>
+                        
+                        <label>Indica il/i giorno/i della settimana:</label>
+                        <div id="sched-days-container" class="sched-day-cb-wrapper">
+                            <label><input type="checkbox" value="0" class="sched-day-cb"> Lunedì</label>
+                            <label><input type="checkbox" value="1" class="sched-day-cb"> Martedì</label>
+                            <label><input type="checkbox" value="2" class="sched-day-cb"> Mercoledì</label>
+                            <label><input type="checkbox" value="3" class="sched-day-cb"> Giovedì</label>
+                            <label><input type="checkbox" value="4" class="sched-day-cb"> Venerdì</label>
+                            <label><input type="checkbox" value="5" class="sched-day-cb"> Sabato</label>
+                            <label><input type="checkbox" value="6" class="sched-day-cb"> Domenica</label>
+                        </div>
+                        <input type="hidden" id="saved-days" value="{{ recurring.days_of_week|default:'0' }}">
+                        
+                        <label style="margin-top:0.5rem">Ora Evento:</label>
+                        <input type="time" id="sched-time" value="{{ recurring.time|time:'H:i'|default:'21:00' }}">
+                        
+                        <hr style="border: 1px solid rgba(255,255,255,0.1); margin: 1rem 0;">
+                        
+                        <label style="margin-top:0.5rem">Ora Invio Messaggio Adesioni (es. mattina presto):</label>
+                        <input type="time" id="sched-rsvp-time" value="{{ recurring.rsvp_time|time:'H:i'|default:'08:00' }}">
+                        <input type="hidden" id="sched-rsvp-days" value="0">
+                        
+                        <label style="margin-top:0.5rem; color:#f6e05e;">Ora Chiusura Adesioni (Elaborazione AI & Invio Coppie):</label>
+                        <input type="time" id="sched-match-time" value="{{ recurring.match_time|time:'H:i'|default:'19:00' }}">
+                        
+                        <hr style="border: 1px solid rgba(255,255,255,0.1); margin: 1rem 0;">
+
+                        <div style="display: flex; gap: 1rem; align-items: center;">
+                            <button class="btn btn-primary" onclick="saveRecurring()">Salva Schedulazione</button>
+                            <button class="btn btn-outline" onclick="triggerRSVP()">Test Invia Ora</button>
+                        </div>
+                        <small id="recurring-status" class="status-msg"></small>
+                    </div>
+                </section>
+
+            </div>
+        </div>
+
+        <!-- TAB SETUP SISTEMA -->
+        <div id="tab-setup" class="tab-content">
+            <div class="main-grid">
+                
+                <section class="glass-panel widget">
+                    <h2>Target WhatsApp</h2>
+                    <div class="whatsapp-group">
+                        <label for="group-name">ID Gruppo WhatsApp Destinatario (es. 1234567@g.us)</label>
+                        <div class="input-group">
+                            <input type="text" id="group-name" value="{{ upcoming_event.whatsapp_group_name|default:'' }}">
+                            <button class="btn btn-primary" onclick="saveGroup('{{ upcoming_event.id }}')">Salva</button>
+                        </div>
+                        <small id="save-status" class="status-msg"></small>
+                    </div>
+                </section>
+
+                <section class="glass-panel widget">
+                    <h2>Gestione Account WhatsApp</h2>
+                    <p class="subtitle" style="text-align:left; margin-bottom:1rem">Disconnetti l'account attualmente collegato per scansionare un nuovo QR Code.</p>
+                    <button class="btn btn-danger" onclick="logoutWhatsApp()">Disconnetti Account</button>
+                    <small id="wa-logout-status" class="status-msg"></small>
+                </section>
+
+                <section class="glass-panel widget">
+                    <h2>Modalità Adesioni</h2>
+                    <p class="subtitle" style="text-align:left; margin-bottom:1rem">Scegli come raccogliere le adesioni (Sondaggio nativo o Risposta Libera letta dall'Intelligenza Artificiale).</p>
+                    
+                    <label for="rsvp-mode">Modalità:</label>
+                    <select id="rsvp-mode" onchange="toggleLLMSection()" style="width: 100%; padding: 0.8rem; border-radius: 8px; border: 1px solid var(--glass-border); background: rgba(0,0,0,0.2); color: white; margin-bottom: 1rem;">
+                        <option value="POLL" {% if recurring.rsvp_mode == 'POLL' %}selected{% endif %}>Sondaggio (Default)</option>
+                        <option value="LLM" {% if recurring.rsvp_mode == 'LLM' %}selected{% endif %}>Risposta Libera (Gemini AI)</option>
+                    </select>
+
+                    <div id="llm-section" style="{% if recurring.rsvp_mode == 'POLL' %}display: none;{% endif %}">
+                        <label for="gemini-api-key">Chiave API Gemini</label>
+                        <input type="password" id="gemini-api-key" value="{{ recurring.gemini_api_key|default:'' }}">
+                    </div>
+                    
+                    <button class="btn btn-primary" style="margin-top:1rem" onclick="saveRecurring()">Salva Impostazioni</button>
+                </section>
+
+                <section class="glass-panel widget">
+                    <h2>Debug e Log</h2>
+                    <p class="subtitle" style="text-align:left; margin-bottom:1rem">Attiva la modalità debug per visualizzare l'Activity Log nella dashboard.</p>
+                    <label style="display:flex; align-items:center; gap:0.5rem; cursor:pointer;">
+                        <input type="checkbox" id="debug-mode-toggle" {% if recurring.debug_mode %}checked{% endif %}>
+                        Attiva Activity Log (Debug Mode)
+                    </label>
+                    
+                    <button class="btn btn-primary" style="margin-top:1rem" onclick="saveRecurring()">Salva Impostazioni</button>
+                </section>
+
+            </div>
+        </div>
+
+        <!-- MODAL AGGIUNGI/MODIFICA PARTECIPANTE -->
+        <div class="modal-overlay" id="participantModal">
+            <div class="modal-content glass-panel">
+                <div class="modal-header">
+                    <h2 id="modalTitle">Nuovo Partecipante</h2>
+                    <button class="close-btn" onclick="closeParticipantModal()">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="p_id">
+                    <div class="form-group">
+                        <label for="p_first_name">Nome</label>
+                        <input type="text" id="p_first_name" placeholder="Es. Mario">
+                    </div>
+                    <div class="form-group">
+                        <label for="p_last_name">Cognome</label>
+                        <input type="text" id="p_last_name" placeholder="Es. Rossi">
+                    </div>
+                    <div class="form-group">
+                        <label for="p_phone_number">Numero di Telefono</label>
+                        <input type="text" id="p_phone_number" placeholder="Es. 393331234567">
+                        <small style="color:var(--text-muted); font-size:0.8rem;">Le ultime 10 cifre verranno usate per il matching con WhatsApp.</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="p_gender">Sesso</label>
+                        <select id="p_gender">
+                            <option value="M">Uomo</option>
+                            <option value="F">Donna</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="p_role">Ruolo</label>
+                        <select id="p_role">
+                            <option value="leader">Leader</option>
+                            <option value="follower">Follower</option>
+                            <option value="both">Entrambi</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="p_level">Livello</label>
+                        <select id="p_level">
+                            <option value="base">Base</option>
+                            <option value="intermedio">Intermedio</option>
+                            <option value="avanzato">Avanzato</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label style="display:flex; align-items:center; gap:0.5rem; cursor:pointer;">
+                            <input type="checkbox" id="p_is_active" checked style="width:auto; margin:0;">
+                            Attivo (Riceve sondaggi)
+                        </label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-outline" onclick="closeParticipantModal()">Annulla</button>
+                    <button class="btn btn-primary" onclick="saveParticipant()">Salva</button>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <a href="{% url 'admin:index' %}" class="btn btn-ghost">Apri Database Avanzato (Django Admin)</a>
+        </footer>
+
+    </div>
+
+    <!-- CSRF Token -->
+    <form style="display: none;">{% csrf_token %}</form>
+
+    <script>
+        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+        // Ripristino checkboxes dei giorni
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedDays = document.getElementById('saved-days');
+            if (savedDays) {
+                const days = savedDays.value.split(',');
+                document.querySelectorAll('.sched-day-cb').forEach(cb => {
+                    if(days.includes(cb.value)) cb.checked = true;
+                });
+            }
+        });
+
+        let participantsData = [];
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            
+            event.currentTarget.classList.add('active');
+            document.getElementById(tabId).classList.add('active');
+
+            if (tabId === 'tab-roster') {
+                fetchParticipants();
+            }
+        }
+
+        async function fetchParticipants() {
+            try {
+                const res = await fetch("{% url 'core:list_participants' %}");
+                const data = await res.json();
+                participantsData = data.participants;
+                renderParticipantsTable();
+            } catch (e) {
+                console.error("Errore nel caricamento partecipanti:", e);
+            }
+        }
+
+        function renderParticipantsTable() {
+            const tbody = document.querySelector('#participants-table tbody');
+            tbody.innerHTML = '';
+            
+            if (participantsData.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding: 2rem; color: var(--text-muted);">Nessun partecipante trovato. Aggiungine uno!</td></tr>';
+                return;
+            }
+
+            participantsData.forEach(p => {
+                const tr = document.createElement('tr');
+                
+                let roleBadge = '';
+                if (p.role === 'leader') roleBadge = '<span class="badge badge-leader">Leader</span>';
+                else if (p.role === 'follower') roleBadge = '<span class="badge badge-follower">Follower</span>';
+                else roleBadge = '<span class="badge badge-both">Entrambi</span>';
+                
+                let activeBadge = p.is_active ? '<span class="badge badge-active">Sì</span>' : '<span class="badge badge-inactive">No</span>';
+                let genderIcon = p.gender === 'M' ? '👨' : '👩';
+
+                tr.innerHTML = `
+                    <td><strong>${p.first_name} ${p.last_name}</strong><br><small style="color:var(--text-muted)">${activeBadge}</small></td>
+                    <td style="font-family:monospace;">${p.phone_number}</td>
+                    <td>${genderIcon} ${p.gender === 'M' ? 'Uomo' : 'Donna'}</td>
+                    <td>${roleBadge}</td>
+                    <td style="text-transform:capitalize;">${p.level}</td>
+                    <td>
+                        <button class="btn btn-outline btn-sm" onclick="editParticipant('${p.id}')">✏️ Modifica</button>
+                        <button class="btn btn-danger btn-sm" onclick="deleteParticipant('${p.id}')">🗑️ Elimina</button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function openParticipantModal(pId = null) {
+            const modal = document.getElementById('participantModal');
+            const title = document.getElementById('modalTitle');
+            
+            if (pId) {
+                title.textContent = 'Modifica Partecipante';
+                const p = participantsData.find(x => x.id === pId);
+                if (p) {
+                    document.getElementById('p_id').value = p.id;
+                    document.getElementById('p_first_name').value = p.first_name;
+                    document.getElementById('p_last_name').value = p.last_name;
+                    document.getElementById('p_phone_number').value = p.phone_number;
+                    document.getElementById('p_gender').value = p.gender;
+                    document.getElementById('p_role').value = p.role;
+                    document.getElementById('p_level').value = p.level;
+                    document.getElementById('p_is_active').checked = p.is_active;
+                }
+            } else {
+                title.textContent = 'Nuovo Partecipante';
+                document.getElementById('p_id').value = '';
+                document.getElementById('p_first_name').value = '';
+                document.getElementById('p_last_name').value = '';
+                document.getElementById('p_phone_number').value = '';
+                document.getElementById('p_gender').value = 'M';
+                document.getElementById('p_role').value = 'leader';
+                document.getElementById('p_level').value = 'intermedio';
+                document.getElementById('p_is_active').checked = true;
+            }
+            
+            modal.classList.add('active');
+        }
+
+        function closeParticipantModal() {
+            document.getElementById('participantModal').classList.remove('active');
+        }
+
+        function editParticipant(pId) {
+            openParticipantModal(pId);
+        }
+
+        async function saveParticipant() {
+            const pId = document.getElementById('p_id').value;
+            const payload = {
+                id: pId || null,
+                first_name: document.getElementById('p_first_name').value,
+                last_name: document.getElementById('p_last_name').value,
+                phone_number: document.getElementById('p_phone_number').value,
+                gender: document.getElementById('p_gender').value,
+                role: document.getElementById('p_role').value,
+                level: document.getElementById('p_level').value,
+                is_active: document.getElementById('p_is_active').checked
+            };
+
+            try {
+                const res = await fetch("{% url 'core:save_participant' %}", {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json', 'X-CSRFToken': csrfToken},
+                    body: JSON.stringify(payload)
+                });
+                const data = await res.json();
+                if (data.success) {
+                    closeParticipantModal();
+                    fetchParticipants();
+                } else {
+                    alert("Errore: " + data.message);
+                }
+            } catch (e) {
+                alert("Errore di connessione.");
+            }
+        }
+
+        async function deleteParticipant(pId) {
+            if (!confirm("Sei sicuro di voler eliminare questo partecipante?")) return;
+            
+            try {
+                const res = await fetch("{% url 'core:delete_participant' %}", {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json', 'X-CSRFToken': csrfToken},
+                    body: JSON.stringify({id: pId})
+                });
+                const data = await res.json();
+                if (data.success) {
+                    fetchParticipants();
+                } else {
+                    alert("Errore: " + data.message);
+                }
+            } catch (e) {
+                alert("Errore di connessione.");
+            }
+        }
+
+        async function saveGroup() {
+            const btn = event.currentTarget;
+            const input = document.getElementById('group-name');
+            const status = document.getElementById('save-status');
+            
+            btn.classList.add('loading');
+            try {
+                const res = await fetch("{% url 'core:update_group' %}", {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json', 'X-CSRFToken': csrfToken},
+                    body: JSON.stringify({ group_name: input.value })
+                });
+                const data = await res.json();
+                status.textContent = data.message;
+                status.className = 'status-msg success';
+            } catch (e) {
+                status.textContent = 'Errore nel salvataggio';
+                status.className = 'status-msg error';
+            } finally {
+                btn.classList.remove('loading');
+                setTimeout(() => status.textContent = '', 3000);
+            }
+        }
+
+        async function logoutWhatsApp() {
+            if(!confirm("Sei sicuro di voler scollegare l'account WhatsApp? Dovrai inquadrare di nuovo il QR Code.")) return;
+            const status = document.getElementById('wa-logout-status');
+            status.textContent = "Disconnessione in corso...";
+            
+            try {
+                const res = await fetch("{% url 'core:wa_logout' %}", {
+                    method: 'POST',
+                    headers: {'X-CSRFToken': csrfToken}
+                });
+                const data = await res.json();
+                status.textContent = data.message;
+                status.className = data.success ? 'status-msg success' : 'status-msg error';
+                if(data.success) {
+                    setTimeout(() => window.location.href = "{% url 'core:onboarding' %}", 2000);
+                }
+            } catch (e) {
+                status.textContent = 'Errore di connessione.';
+                status.className = 'status-msg error';
+            }
+        }
+
+        async function triggerRSVP() {
+            if(!confirm("Vuoi inviare ORA il SONDAGGIO al gruppo WhatsApp?")) return;
+            const status = document.getElementById('action-status');
+            status.textContent = "Invio sondaggio in corso...";
+            status.className = "status-msg warning";
+            
+            try {
+                const res = await fetch("{% url 'core:trigger_rsvp' %}", {
+                    method: 'POST',
+                    headers: {'X-CSRFToken': csrfToken}
+                });
+                const data = await res.json();
+                status.textContent = data.message;
+                status.className = data.success ? 'status-msg success' : 'status-msg error';
+            } catch (e) {
+                status.textContent = 'Errore di connessione.';
+                status.className = 'status-msg error';
+            }
+        }
+
+        async function triggerMatch() {
+            if(!confirm("Questo chiuderà il sondaggio, genererà le coppie definitive e le invierà al gruppo. Continuare?")) return;
+            const status = document.getElementById('action-status');
+            status.textContent = "Elaborazione algoritmo di matching e invio...";
+            status.className = "status-msg warning";
+            
+            try {
+                const res = await fetch("{% url 'core:trigger_match' %}", {
+                    method: 'POST',
+                    headers: {'X-CSRFToken': csrfToken}
+                });
+                const data = await res.json();
+                status.textContent = data.message;
+                status.className = data.success ? 'status-msg success' : 'status-msg error';
+                if(data.success) {
+                    setTimeout(() => window.location.reload(), 2000);
+                }
+            } catch (e) {
+                status.textContent = 'Errore di connessione.';
+                status.className = 'status-msg error';
+            }
+        }
+
+        async function saveTemplates() {
+            const status = document.getElementById('tpl-status');
+            const rsvpText = document.getElementById('rsvp-template-text').value;
+            const matchText = document.getElementById('match-template-text').value;
+            
+            try {
+                const res = await fetch("{% url 'core:update_templates' %}", {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json', 'X-CSRFToken': csrfToken},
+                    body: JSON.stringify({ rsvp_text: rsvpText, match_text: matchText })
+                });
+                const data = await res.json();
+                status.textContent = data.message;
+                status.className = data.success ? 'status-msg success' : 'status-msg error';
+            } catch (e) {
+                status.textContent = 'Errore di connessione.';
+                status.className = 'status-msg error';
+            }
+            setTimeout(() => status.textContent = '', 3000);
+        }
+
+        function toggleLLMSection() {
+            const mode = document.getElementById('rsvp-mode').value;
+            document.getElementById('llm-section').style.display = mode === 'LLM' ? 'block' : 'none';
+        }
+
+        async function saveRecurring() {
+            const status = document.getElementById('recurring-status');
+            status.textContent = "Salvataggio in corso...";
+            
+            const selectedDays = Array.from(document.querySelectorAll('.sched-day-cb:checked')).map(cb => cb.value).join(',');
+            
+            const payload = {
+                days_of_week: selectedDays,
+                start_date: document.getElementById('sched-start').value,
+                end_date: document.getElementById('sched-end').value,
+                time: document.getElementById('sched-time').value,
+                rsvp_days: document.getElementById('sched-rsvp-days').value,
+                rsvp_time: document.getElementById('sched-rsvp-time').value,
+                match_time: document.getElementById('sched-match-time').value,
+                rsvp_mode: document.getElementById('rsvp-mode').value,
+                gemini_api_key: document.getElementById('gemini-api-key').value,
+                debug_mode: document.getElementById('debug-mode-toggle') ? document.getElementById('debug-mode-toggle').checked : true
+            };
+
+            try {
+                const res = await fetch("{% url 'core:update_recurring' %}", {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json', 'X-CSRFToken': csrfToken},
+                    body: JSON.stringify(payload)
+                });
+                const data = await res.json();
+                status.textContent = data.message;
+                status.className = data.success ? 'status-msg success' : 'status-msg error';
+            } catch (e) {
+                status.textContent = 'Errore di connessione.';
+                status.className = 'status-msg error';
+            }
+            setTimeout(() => status.textContent = '', 3000);
+        }
+    </script>
+</body>
+</html>
