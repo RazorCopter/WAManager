@@ -1,0 +1,87 @@
+{
+  "3EB0C961D9320E3A6E1B71": {
+    "messageContextInfo": {
+      "messageSecret": "6kNkC7LC9mw5tJbzIdj08M5M7/IaLX0eXjj3JWesTv0="
+    },
+    "pollCreationMessage": {
+      "name": "Ciao a tutti! Chi è presente oggi per l'evento del 23/09/2026? 🕺💃\nScrivete un messaggio in questa chat entro le ore 15:30 per confermare la vostra presenza.",
+      "options": [
+        {
+          "optionName": "Ci sono! 🕺💃"
+        },
+        {
+          "optionName": "Non ci sono 🚫"
+        }
+      ],
+      "selectableOptionsCount": 2
+    }
+  },
+  "3EB0C63DC7C0B32F58F90F": {
+    "messageContextInfo": {
+      "messageSecret": "dEJdqjVjDWeqDN/BCeQX5D8SL0m3nmkXeBOsYbwbsAA="
+    },
+    "pollCreationMessage": {
+      "name": "Ciao a tutti! Chi è presente oggi per l'evento del 23/09/2026? 🕺💃\nScrivete un messaggio in questa chat entro le ore 15:37 per confermare la vostra presenza.",
+      "options": [
+        {
+          "optionName": "Ci sono! 🕺💃"
+        },
+        {
+          "optionName": "Non ci sono 🚫"
+        }
+      ],
+      "selectableOptionsCount": 2
+    }
+  },
+  "3EB07E6ADBA9C92DF0E16C": {
+    "messageContextInfo": {
+      "messageSecret": "7OTWs6wAs8tz8RN2lf8rw0ypU7pms4j2jSDsQxImJVs="
+    },
+    "pollCreationMessage": {
+      "name": "Ciao a tutti! Chi è presente oggi per l'evento del 23/09/2026? 🕺💃\nScrivete un messaggio in questa chat entro le ore 15:43 per confermare la vostra presenza.",
+      "options": [
+        {
+          "optionName": "Ci sono! 🕺💃"
+        },
+        {
+          "optionName": "Non ci sono 🚫"
+        }
+      ],
+      "selectableOptionsCount": 2
+    }
+  },
+  "3EB0DF74DCBFDD1DC493DB": {
+    "messageContextInfo": {
+      "messageSecret": "nrnfGRd3ZlZTMqYXrr4nJqqMN7qRIYBSBTKhPiOliAY="
+    },
+    "pollCreationMessage": {
+      "name": "Ciao a tutti! Chi è presente oggi per l'evento del 24/09/2026? 🕺💃\nScrivete un messaggio in questa chat entro le ore 15:38 per confermare la vostra presenza.",
+      "options": [
+        {
+          "optionName": "Ci sono! 🕺💃"
+        },
+        {
+          "optionName": "Non ci sono 🚫"
+        }
+      ],
+      "selectableOptionsCount": 2
+    }
+  },
+  "3EB0B71812F5E6AD0E3466": {
+    "messageContextInfo": {
+      "messageSecret": "GgqHNVBWheeJ47qUNK9OXYUktgxdMJOpo/AL1/sJAZ8="
+    },
+    "pollCreationMessage": {
+      "name": "Ciao a tutti! Chi è presente oggi per l'evento del 24/09/2026? 🕺💃\nScrivete un messaggio in questa chat entro le ore 15:39 per confermare la vostra presenza.",
+      "options": [
+        {
+          "optionName": "Ci sono! 🕺💃"
+        },
+        {
+          "optionName": "Non ci sono 🚫"
+        }
+      ],
+      "selectableOptionsCount": 2
+    }
+  }
+}

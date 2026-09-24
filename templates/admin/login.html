@@ -1,0 +1,102 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WAManager - Premium Login</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'core/css/dashboard.css' %}?v=2">
+    <style>
+        .login-container {
+            max-width: 450px;
+            margin: 12vh auto;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            position: relative;
+            z-index: 10;
+        }
+        .login-header {
+            text-align: center;
+        }
+        .login-header .logo h1 {
+            font-size: 3.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .login-header .logo p {
+            font-size: 1.2rem;
+        }
+        .error-msg {
+            color: var(--error);
+            background: rgba(239, 68, 68, 0.1);
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+        .login-btn {
+            width: 100%;
+            margin-top: 1rem;
+            padding: 1rem;
+            font-size: 1.1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+
+    <div class="login-container">
+        <div class="login-header">
+            <div class="logo">
+                <h1>Tango<span>Manager</span></h1>
+                <p>Centro di Controllo Adesioni</p>
+            </div>
+        </div>
+
+        <div class="glass-panel">
+            <h2 style="font-family: 'Outfit', sans-serif; font-size: 1.8rem; margin-bottom: 1.5rem; text-align: center;">Area Riservata</h2>
+            
+            {% if form.errors and not form.non_field_errors %}
+                <div class="error-msg">Nome utente e/o password non corretti. Riprova.</div>
+            {% endif %}
+            
+            {% if form.non_field_errors %}
+                {% for error in form.non_field_errors %}
+                    <div class="error-msg">{{ error }}</div>
+                {% endfor %}
+            {% endif %}
+            
+            {% if user.is_authenticated %}
+                <div class="error-msg">Sei già autenticato come {{ user.username }}, ma non sei autorizzato ad accedere a questa pagina.</div>
+            {% endif %}
+
+            <form method="post" id="login-form">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="id_username">Nome utente</label>
+                    <input type="text" name="username" autofocus autocapitalize="none" autocomplete="username" maxlength="150" required id="id_username">
+                </div>
+                <div class="form-group">
+                    <label for="id_password">Password</label>
+                    <input type="password" name="password" autocomplete="current-password" required id="id_password">
+                    <input type="hidden" name="next" value="{{ next }}">
+                </div>
+                <button type="submit" class="btn btn-primary login-btn">Accedi al Sistema</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adesione Registrata</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+    <style>
+        body { padding: 2rem 0; background-color: var(--background-color); text-align: center; }
+        .container { max-width: 600px; }
+        .success-icon { font-size: 4rem; margin-bottom: 1rem; }
+    </style>
+</head>
+<body>
+    <main class="container">
+        <article>
+            <div class="success-icon">✅</div>
+            <h2>Grazie, {{ participant.first_name }}!</h2>
+            
+            {% if status == 'attending' %}
+                <p>La tua presenza per la lezione del <strong>{{ event.date|date:"d M Y" }}</strong> è stata registrata con successo.</p>
+                <p>Ci vediamo in pista! 💃🕺</p>
+            {% elif status == 'not_attending' %}
+                <p>Abbiamo registrato la tua assenza per la lezione del <strong>{{ event.date|date:"d M Y" }}</strong>.</p>
+                <p>Alla prossima! 👋</p>
+            {% else %}
+                <p>La tua preferenza è stata registrata.</p>
+            {% endif %}
+            
+            <p><small>Puoi chiudere questa pagina o tornare su WhatsApp.</small></p>
+        </article>
+    </main>
+</body>
+</html>
