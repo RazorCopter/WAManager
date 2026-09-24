@@ -239,6 +239,12 @@ def update_recurring(request):
                 recurring.gemini_api_key = data.get('gemini_api_key')
             if 'debug_mode' in data:
                 recurring.debug_mode = data.get('debug_mode')
+                # Invia aggiornamento al gateway NodeJS per il filtro privacy
+                try:
+                    import requests
+                    requests.post('http://127.0.0.1:4002/api/settings', json={'debug_mode': recurring.debug_mode}, timeout=3)
+                except Exception as e:
+                    print(f"Impossibile notificare il gateway per il debug_mode: {e}")
                 
             recurring.save()
             

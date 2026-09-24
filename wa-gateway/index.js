@@ -9,6 +9,8 @@ const pino = require('pino');
 const qrcode = require('qrcode-terminal');
 const qrcodeData = require('qrcode');
 
+let globalSettings = { debugMode: false };
+
 let currentStatus = 'INITIALIZING';
 let currentQrDataUrl = null;
 
@@ -91,10 +93,14 @@ async function connectToWhatsApp() {
                 const text = msg.message.conversation || msg.message.extendedTextMessage?.text;
                 const sender = msg.key.participant || msg.key.remoteJid;
                 
-                if (!msg.key.fromMe) {
-                    logToFile(`Messaggio ricevuto: ${text} da ${sender}`);
-                } else {
-                    logToFile(`Messaggio inviato (o dal bot): ${text} a ${msg.key.remoteJid}`);
+                // Filtra il parsing dei messaggi testuali solo al target group, per evitare log personali
+                const targetGroup = process.env.TARGET_GROUP_ID;
+                if (globalSettings.debugMode || (targetGroup && msg.key.remoteJid === targetGroup)) {
+                    if (!msg.key.fromMe) {
+                        logToFile(`Messaggio ricevuto: ${text} da ${sender}`);
+                    } else {
+                        logToFile(`Messaggio inviato (o dal bot): ${text} a ${msg.key.remoteJid}`);
+                    }
                 }
             }
 
@@ -233,6 +239,15 @@ async function connectToWhatsApp() {
 }
 
 connectToWhatsApp();
+
+// Endpoint API per aggiornare le impostazioni dal backend
+app.post('/api/settings', (req, res) => {
+    if (req.body.debug_mode !== undefined) {
+        globalSettings.debugMode = req.body.debug_mode;
+        logToFile(`Debug mode impostato a: ${globalSettings.debugMode}`);
+    }
+    res.json({ success: true, settings: globalSettings });
+});
 
 // Endpoint API per inviare messaggi (o sondaggi) dal backend
 app.post('/api/send', async (req, res) => {
