@@ -83,5 +83,39 @@
       ],
       "selectableOptionsCount": 2
     }
+  },
+  "3EB0152CF9885F768EC9CC": {
+    "messageContextInfo": {
+      "messageSecret": "376NbqHvS9IKaDfqgl+p897g1fs1h9F7YF/UHzJ/UDA="
+    },
+    "pollCreationMessage": {
+      "name": "Ciao a tutti! Chi è presente oggi per l'evento del 24/09/2026? 🕺💃\nScrivete un messaggio in questa chat entro le ore 16:00 per confermare la vostra presenza.",
+      "options": [
+        {
+          "optionName": "Ci sono! 🕺💃"
+        },
+        {
+          "optionName": "Non ci sono 🚫"
+        }
+      ],
+      "selectableOptionsCount": 2
+    }
+  },
+  "3EB0CBEEDD4B14191ECDA9": {
+    "messageContextInfo": {
+      "messageSecret": "NSbBd8p4VTSEuY81E//RwwdmdAwTNbDggwFmeLiGPmU="
+    },
+    "pollCreationMessage": {
+      "name": "Ciao a tutti! Chi è presente oggi per l'evento del 24/09/2026? 🕺💃\nScrivete un messaggio in questa chat entro le ore 18:06 per confermare la vostra presenza.",
+      "options": [
+        {
+          "optionName": "Ci sono! 🕺💃"
+        },
+        {
+          "optionName": "Non ci sono 🚫"
+        }
+      ],
+      "selectableOptionsCount": 2
+    }
   }
 }
